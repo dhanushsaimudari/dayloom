@@ -45,10 +45,10 @@
   --shadow-glow: 0 0 25px var(--primary-glow);
 
   /* Theme Atmosphere Background Variables */
-  --theme-bg-image: url("/themes/theme_5_vintage_ephemera.jpg");
-  --theme-accent: #6366f1;
-  --theme-overlay-opacity: 0.25;
-  --theme-blur: 0px;
+  --theme-bg-image: url("/themes/theme_7_luminous_butterfly.jpg");
+  --theme-accent: #c084fc;
+  --theme-overlay-opacity: 0.45;
+  --theme-blur: 2px;
   --bg-wallpaper-opacity: 0.88;
 }
 

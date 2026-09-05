@@ -118,7 +118,7 @@ export const DAYLOOM_THEMES = [
   }
 ];
 
-export const DEFAULT_THEME_ID = 'theme_5_vintage_ephemera';
+export const DEFAULT_THEME_ID = 'theme_7_luminous_butterfly';
 
 export function getThemeById(themeId) {
   return DAYLOOM_THEMES.find(t => t.id === themeId) || DAYLOOM_THEMES[0];

@@ -23,7 +23,7 @@ export default function OnboardingPage() {
   const [prefTime, setPrefTime] = useState('21:00');
   const [language, setLanguage] = useState('en');
   const [selectedTheme, setSelectedTheme] = useState('dark');
-  const [selectedWallpaper, setSelectedWallpaper] = useState('theme_5_vintage_ephemera');
+  const [selectedWallpaper, setSelectedWallpaper] = useState('theme_7_luminous_butterfly');
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 

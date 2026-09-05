@@ -47,7 +47,7 @@ router.get('/profile', async (req, res) => {
       prefTime: '21:00',
       language: 'en',
       theme: 'dark',
-      wallpaperURL: 'theme_5_vintage_ephemera',
+      wallpaperURL: 'theme_7_luminous_butterfly',
       notificationsEnabled: true,
       onboardingCompleted: isOnboarded,
       createdAt: nowISO,
@@ -152,7 +152,7 @@ router.post('/onboarding', validateUserSettingsPayload, async (req, res) => {
       prefTime: prefTime || '21:00',
       language: language || 'en',
       theme: theme || 'dark',
-      wallpaperURL: wallpaperURL || 'theme_5_vintage_ephemera',
+      wallpaperURL: wallpaperURL || 'theme_7_luminous_butterfly',
       notificationsEnabled: true,
       onboardingCompleted: true,
       updatedAt: nowISO

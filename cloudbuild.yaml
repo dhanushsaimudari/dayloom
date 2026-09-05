@@ -1,11 +1,11 @@
 steps:
   # 1. Build Docker image without stale cache
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--no-cache', '-t', 'gcr.io/$PROJECT_ID/dayloom-app:$COMMIT_SHA', '.']
+    args: ['build', '--no-cache', '-t', 'gcr.io/$PROJECT_ID/dayloom-app:latest', '.']
 
   # 2. Push image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/dayloom-app:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/dayloom-app:latest']
 
   # 3. Deploy to Google Cloud Run with Secret Manager secret injection
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -14,7 +14,7 @@ steps:
       - 'run'
       - 'deploy'
       - 'dayloom-app'
-      - '--image=gcr.io/$PROJECT_ID/dayloom-app:$COMMIT_SHA'
+      - '--image=gcr.io/$PROJECT_ID/dayloom-app:latest'
       - '--region=us-central1'
       - '--platform=managed'
       - '--allow-unauthenticated'
@@ -22,4 +22,4 @@ steps:
       - '--update-secrets=GEMINI_API_KEY=GEMINI_API_KEY:latest'
 
 images:
-  - 'gcr.io/$PROJECT_ID/dayloom-app:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/dayloom-app:latest'
