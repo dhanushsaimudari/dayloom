@@ -8,6 +8,10 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
  * premature unauthenticated requests on page refresh.
  */
 async function getAuthToken(forceRefresh = false) {
+  if (!auth) {
+    throw new Error('Firebase authentication is not initialized. Please verify configuration.');
+  }
+
   if (typeof auth.authStateReady === 'function') {
     await auth.authStateReady();
   }

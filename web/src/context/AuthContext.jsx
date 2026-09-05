@@ -10,7 +10,7 @@ import {
   EmailAuthProvider,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { auth } from '../services/firebase.js';
+import { auth, isFirebaseConfigured, firebaseInitError } from '../services/firebase.js';
 import { getUserProfile } from '../services/api.js';
 
 const AuthContext = createContext(null);
@@ -36,6 +36,12 @@ export function AuthProvider({ children }) {
   };
 
   useEffect(() => {
+    if (!auth || !isFirebaseConfigured) {
+      console.warn('[AuthContext] Firebase auth is unavailable. Skipping auth state listener.');
+      setLoading(false);
+      return;
+    }
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setCurrentUser(user);
@@ -51,7 +57,16 @@ export function AuthProvider({ children }) {
     return () => unsubscribe();
   }, []);
 
+  const ensureAuthReady = () => {
+    if (!auth || !isFirebaseConfigured) {
+      throw new Error(
+        'Firebase Authentication is not configured. Please supply valid VITE_FIREBASE_API_KEY environment variables to Dayloom.'
+      );
+    }
+  };
+
   const login = async (email, password) => {
+    ensureAuthReady();
     const res = await signInWithEmailAndPassword(auth, email, password);
     setCurrentUser(res.user);
     const profileData = await fetchProfileData();
@@ -59,6 +74,7 @@ export function AuthProvider({ children }) {
   };
 
   const signup = async (email, password) => {
+    ensureAuthReady();
     const res = await createUserWithEmailAndPassword(auth, email, password);
     setCurrentUser(res.user);
     const profileData = await fetchProfileData();
@@ -66,6 +82,7 @@ export function AuthProvider({ children }) {
   };
 
   const loginWithGoogle = async () => {
+    ensureAuthReady();
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: 'select_account' });
     const res = await signInWithPopup(auth, provider);
@@ -75,10 +92,12 @@ export function AuthProvider({ children }) {
   };
 
   const logout = async () => {
-    try {
-      await firebaseSignOut(auth);
-    } catch (e) {
-      console.warn('[AuthContext] Firebase logout notice:', e.message);
+    if (auth) {
+      try {
+        await firebaseSignOut(auth);
+      } catch (e) {
+        console.warn('[AuthContext] Firebase logout notice:', e.message);
+      }
     }
     setCurrentUser(null);
     setUserProfile(null);
@@ -86,6 +105,7 @@ export function AuthProvider({ children }) {
   };
 
   const reauthenticate = async (password) => {
+    ensureAuthReady();
     if (!auth.currentUser || !auth.currentUser.email) {
       throw new Error('No active authenticated session found.');
     }
@@ -94,6 +114,7 @@ export function AuthProvider({ children }) {
   };
 
   const resetPassword = async (email) => {
+    ensureAuthReady();
     if (!email || !email.trim()) {
       throw new Error('Please enter your email address to receive a password reset link.');
     }
@@ -108,6 +129,8 @@ export function AuthProvider({ children }) {
     userSettings,
     setUserSettings,
     loading,
+    isFirebaseConfigured,
+    firebaseInitError,
     login,
     signup,
     loginWithGoogle,

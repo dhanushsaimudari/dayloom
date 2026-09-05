@@ -1,0 +1,11 @@
+.gcloudignore
+.git
+.gitignore
+
+node_modules/
+web/node_modules/
+
+# Ensure gcloud builds submit includes web/.env and pre-built web/dist
+!web/.env
+!web/.env.*
+!web/dist/**

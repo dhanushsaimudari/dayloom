@@ -11,7 +11,42 @@ import ChatPage from './pages/ChatPage.jsx';
 import CalendarPage from './pages/CalendarPage.jsx';
 import AnalyticsPage from './pages/AnalyticsPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
-import { Sparkles, RefreshCw } from 'lucide-react';
+import { Sparkles, RefreshCw, AlertTriangle } from 'lucide-react';
+import { isFirebaseConfigured } from './services/firebase.js';
+
+function FirebaseConfigWarning() {
+  return (
+    <div className="loading-screen" style={{ padding: '2rem', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="glass-card" style={{ maxWidth: '540px', margin: '0 auto', padding: '2.5rem', textAlign: 'left', border: '1px solid rgba(239, 68, 68, 0.35)', background: 'var(--bg-card, rgba(255, 255, 255, 0.95))' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: '#ef4444' }}>
+          <AlertTriangle size={28} />
+          <h2 style={{ fontSize: '1.35rem', fontWeight: 600, margin: 0, color: 'var(--text-primary)' }}>
+            Firebase Configuration Missing
+          </h2>
+        </div>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: 1.6, marginBottom: '1.25rem' }}>
+          Dayloom’s web client was built without Firebase credentials (<code>VITE_FIREBASE_API_KEY</code>).
+          Because Vite compiles environment variables into the static bundle at build time, client authentication cannot start.
+        </p>
+        <div style={{ background: 'rgba(0,0,0,0.06)', borderRadius: '8px', padding: '1rem', fontSize: '0.85rem', marginBottom: '1.5rem', color: 'var(--text-primary)' }}>
+          <strong>How to fix:</strong>
+          <ul style={{ paddingLeft: '1.2rem', marginTop: '0.5rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+            <li>Compile the frontend locally with your <code>web/.env</code> file (<code>npm run build</code> inside <code>web/</code>).</li>
+            <li>Re-deploy your container using Docker / Cloud Run without layer cache (<code>--no-cache</code>).</li>
+          </ul>
+        </div>
+        <button 
+          className="btn btn-primary" 
+          onClick={() => window.location.reload()}
+          style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}
+        >
+          <RefreshCw size={16} />
+          <span>Reload Dayloom</span>
+        </button>
+      </div>
+    </div>
+  );
+}
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -111,6 +146,10 @@ function PublicAuthRoute() {
 }
 
 export default function App() {
+  if (!isFirebaseConfigured) {
+    return <FirebaseConfigWarning />;
+  }
+
   return (
     <ErrorBoundary>
       <AuthProvider>

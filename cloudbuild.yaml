@@ -1,7 +1,7 @@
 steps:
-  # 1. Build Docker image
+  # 1. Build Docker image without stale cache
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/dayloom-app:$COMMIT_SHA', '.']
+    args: ['build', '--no-cache', '-t', 'gcr.io/$PROJECT_ID/dayloom-app:$COMMIT_SHA', '.']
 
   # 2. Push image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'

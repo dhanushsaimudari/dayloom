@@ -1,0 +1,31 @@
+# Dependency folders from host
+node_modules
+web/node_modules
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Git metadata
+.git
+.gitignore
+
+# Documentation & tests
+*.pdf
+blog.txt
+README.md
+tests
+
+# Backend secrets (protect from image layers)
+service-account-key.json
+*service-account*.json
+.env
+.env.*
+!.env.example
+
+# EXPLICIT WHITELIST: Ensure Docker build context includes web/.env and web/dist
+!web/.env
+!web/.env.*
+!web/dist
+!web/dist/**
